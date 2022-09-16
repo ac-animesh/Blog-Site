@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // access   public
 // route    POST /api/auth/register
 const register = async (req, res) => {
-  const { username, email, isAdmin, password } = req.body;
+  const { name, email, isAdmin, password } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -19,7 +19,7 @@ const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     user = new User({
-      username,
+      name,
       email,
       isAdmin,
       password: hashedPassword,
@@ -42,7 +42,7 @@ const login = async (req, res) => {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       res.status(200).json({
-        username: user.username,
+        name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
         token: generateToken(user._id),

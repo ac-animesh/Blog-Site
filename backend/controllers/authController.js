@@ -29,6 +29,7 @@ const register = async (req, res) => {
     res.status(200).json({ message: "User is Registered" });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -52,22 +53,7 @@ const login = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: "Something went wrong" });
-  }
-};
-
-// get user
-const getUser = async (req, res) => {
-  const user = {
-    id: req.user._id,
-    name: req.user.name,
-    email: req.user.email,
-    isAdmin: req.user.isAdmin,
-  };
-  if (user) {
-    res.status(200).json(user);
-  } else {
-    res.status(401).json({ message: "Invalid User" });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -79,5 +65,4 @@ const generateToken = (id) => {
 module.exports = {
   login,
   register,
-  getUser,
 };

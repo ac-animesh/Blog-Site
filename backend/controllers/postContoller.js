@@ -26,7 +26,7 @@ const createPost = async (req, res) => {
     res.status(200).json(post);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -49,7 +49,7 @@ const getPosts = async (req, res) => {
     res.status(200).json(posts);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -66,7 +66,7 @@ const getSinglePosts = async (req, res) => {
     res.status(200).json(posts);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -83,7 +83,7 @@ const deletePost = async (req, res) => {
     res.status(200).json({ message: "Post is Deleted" });
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -104,7 +104,7 @@ const updatePost = async (req, res) => {
     res.status(200).json(post);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 

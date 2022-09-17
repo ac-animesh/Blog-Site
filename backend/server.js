@@ -8,8 +8,9 @@ app.use(express.json({ extended: false }));
 const PORT = process.env.PORT || 8000;
 
 app.use("/api/auth/", require("./routes/authRoutes"));
-app.use("/api/auth/", require("./routes/usersRoutes"));
-app.use("/api/auth/post/", require("./routes/postsRoutes"));
+app.use("/api/user/", require("./routes/usersRoutes"));
+app.use("/api/post/", require("./routes/postsRoutes"));
+app.use("/api/categories/", require("./routes/categoriesRoutes"));
 
 app.listen(PORT, () => {
   console.log(`Server is started on PORT ${PORT}`);

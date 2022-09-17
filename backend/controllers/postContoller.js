@@ -3,7 +3,7 @@ const Post = require("../models/postSchema");
 
 // desc     create a post
 // access   private
-// route    POST /api/auth/post
+// route    POST /api/post
 const createPost = async (req, res) => {
   try {
     const { title, desc, photo, name, categories } = req.body;
@@ -32,16 +32,23 @@ const createPost = async (req, res) => {
 
 // desc     get all posts
 // access   private
-// route    GET /api/auth/posts
+// route    GET /api/posts
 const getPosts = async (req, res) => {
+  const name = req.query.user;
+  const categ = req.query.category;
   try {
-    const { title, desc, photo, name, categories } = req.body;
-
-    const user = await User.findOne({ name });
-    if (!user) {
-      return res.status(401).json({ message: "Invalid User" });
+    let posts;
+    if (name) {
+      posts = await Post.find({ name });
+    } else if (categ) {
+      posts = await Post.find({
+        categories: {
+          $in: [categ],
+        },
+      });
+    } else {
+      posts = await Post.find();
     }
-    const posts = await Post.find(req.id);
     if (!posts) {
       return res.status(401).json({ message: "Post not found" });
     }
@@ -55,7 +62,7 @@ const getPosts = async (req, res) => {
 
 // desc     get a post
 // access   private
-// route    GET /api/auth/post/:id
+// route    GET /api/post/:id
 const getSinglePosts = async (req, res) => {
   try {
     const posts = await Post.findById(req.params.id);
@@ -72,7 +79,7 @@ const getSinglePosts = async (req, res) => {
 
 // desc     delete a post
 // access   private
-// route    DELETE /api/auth/post/:id
+// route    DELETE /api/post/:id
 const deletePost = async (req, res) => {
   try {
     const post = await Post.findByIdAndDelete(req.params.id);
@@ -89,7 +96,7 @@ const deletePost = async (req, res) => {
 
 // desc     update a post
 // access   private
-// route    UPDATE /api/auth/post/:id
+// route    UPDATE /api/post/:id
 const updatePost = async (req, res) => {
   try {
     const post = await Post.findByIdAndUpdate(

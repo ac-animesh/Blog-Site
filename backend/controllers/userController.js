@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 // desc     delete user
 // access   private
-// route    Delete /api/auth/delete
+// route    Delete /api/auth/:id
 const deleteUser = async (req, res) => {
   try {
     let user = await User.findByIdAndDelete(req.params.id);
@@ -21,7 +21,7 @@ const deleteUser = async (req, res) => {
 
 // desc     update user
 // access   private
-// route    POST /api/auth/login
+// route    POST /api/auth/:id
 const updateUser = async (req, res) => {
   try {
     if (req.body.password) {

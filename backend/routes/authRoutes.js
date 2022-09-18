@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express();
-// const auth = require("../middleware/authMiddleware");
 const { login, register } = require("../controllers/authController");
 
 // desc     register route
@@ -12,5 +11,10 @@ router.post("/register", register);
 // access   public
 // route    POST /auth/login
 router.post("/login", login);
+
+// desc     refresh token
+// access   public
+// route    POST /auth/refresh
+// router.post("/refresh", login);
 
 module.exports = router;

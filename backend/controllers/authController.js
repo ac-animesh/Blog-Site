@@ -1,4 +1,5 @@
 const User = require("../models/userSchema");
+// const RefreshToken = require("../models/refreshTokenSchema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -37,29 +38,62 @@ const register = async (req, res) => {
 // access   public
 // route    POST /api/auth/login
 const login = async (req, res) => {
-  const { email, password } = req.body;
   try {
-    let user = await User.findOne({ email });
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
+    let user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ message: "User not found." });
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if (match) {
+      // Access Token
+      const accessToken = jwt.sign(
+        { id: user._id, username: user.name },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: "20s",
+        }
+      );
+      // Refresh Token
+      const refreshToken = jwt.sign(
+        { id: user._id, username: user.name },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+          expiresIn: "2d",
+        }
+      );
+
+      user.refreshToken = refreshToken;
+
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        // secure: true,
+        // sameSite: "None",
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
+      await user.save();
       res.status(200).json({
+        id: user._id,
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        token: generateToken(user._id),
+        profilePic: user.profilePic,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
       });
     } else {
-      res.status(401).json({ message: "Invalid Credentials" });
+      res.status(500).json({ message: "Incorrect password" });
     }
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Something went wrong" });
   }
-};
-
-// token generator
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 module.exports = {

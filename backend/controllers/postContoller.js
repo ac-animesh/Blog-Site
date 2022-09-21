@@ -8,7 +8,7 @@ const createPost = async (req, res) => {
   try {
     const { title, desc, photo, name, categories } = req.body;
 
-    const user = await User.findOne({ name });
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(401).json({ message: "Invalid User" });
     }
@@ -37,6 +37,10 @@ const getPosts = async (req, res) => {
   const name = req.query.user;
   const categ = req.query.category;
   try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(401).json({ message: "Invalid User" });
+    }
     let posts;
     if (name) {
       posts = await Post.find({ name });
@@ -65,6 +69,10 @@ const getPosts = async (req, res) => {
 // route    GET /api/post/:id
 const getSinglePosts = async (req, res) => {
   try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(401).json({ message: "Invalid User" });
+    }
     const posts = await Post.findById(req.params.id);
     if (!posts) {
       return res.status(401).json({ message: "Post not found" });
@@ -82,6 +90,11 @@ const getSinglePosts = async (req, res) => {
 // route    DELETE /api/post/:id
 const deletePost = async (req, res) => {
   try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid User" });
+    }
     const post = await Post.findByIdAndDelete(req.params.id);
     if (!post) {
       return res.status(401).json({ message: "Post not found" });
@@ -99,6 +112,10 @@ const deletePost = async (req, res) => {
 // route    UPDATE /api/post/:id
 const updatePost = async (req, res) => {
   try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(401).json({ message: "Invalid User" });
+    }
     const post = await Post.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },

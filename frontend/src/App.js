@@ -1,13 +1,12 @@
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home/Home";
-
-// import Header from "./pages/Header";
+import Navbar from "./components/Navbar/Navbar";
+// import Home from "./pages/Home/Home";
+import SinglePostPage from "./pages/SinglePostPage/SinglePostPage";
 
 const App = () => {
   return (
     <div>
       <Navbar />
-      <Home />
+      <SinglePostPage />
     </div>
   );
 };

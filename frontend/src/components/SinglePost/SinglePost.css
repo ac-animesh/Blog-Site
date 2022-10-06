@@ -1,5 +1,4 @@
 .singlePost {
-  /* background-color: tomato; */
   padding: 1rem;
 }
 
@@ -27,6 +26,7 @@
   font-size: 1.5rem;
   margin-right: 0.75rem;
   cursor: pointer;
+  color: #087f5b;
 }
 
 .singlePost-author {
